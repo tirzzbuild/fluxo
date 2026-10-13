@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>BADAK Essor</title>
+<meta name="theme-color" content="#0b3a8f">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="BADAK Essor">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2716%27 fill=%27%231e6bff%27/%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Archivo+Black&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0a1b3d;--b1:#0b3a8f;--b2:#1e6bff;--sky:#22d3ee;--bg:#eef4ff;--card:#fff;--soft:#dce8ff;--line:#d3e1fb;--mut:#5b6f95;--r:8px}
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+/* LAPIS 1: background penuh (isi BACKGROUND di pengaturan untuk pakai gambar sendiri) */
+body{font-family:'Space Grotesk',system-ui,sans-serif;color:var(--ink);min-height:100vh;background-color:#061a4a;
+background-image:radial-gradient(900px 520px at 8% -8%,rgba(34,211,238,.55),transparent 62%),radial-gradient(800px 640px at 105% 108%,rgba(30,107,255,.75),transparent 60%),linear-gradient(165deg,#0b3a8f,#061a4a 70%);
+background-size:cover;background-position:center;background-attachment:fixed}
+h1,h2,h3,.big{font-family:'Archivo Black','Space Grotesk',sans-serif;letter-spacing:.3px}
+/* LAPIS 2: background kecil yang mengapung di atas lapis 1 */
+#app{max-width:430px;margin:0 auto;padding:0 18px 40px}
+#pg{color:#fff}
+.box,.tool,.cat,.m,.chip,input,select,textarea,.qris,.age{color:var(--ink)}
+.sec h3{color:#fff}
+#app:has(.login){max-width:400px;padding-top:8vh}
+.top{display:flex;align-items:center;gap:10px;margin:0 -18px 18px;padding:14px 18px;position:sticky;top:0;background:rgba(6,26,74,.82);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);z-index:5}
+.top .logo{background-color:rgba(255,255,255,.12);border-color:rgba(255,255,255,.5)}
+/* slot gambar polos: tinggal isi link gambar di pengaturan */
+.logo,.av,.ico{background:#e3edff center/cover no-repeat;border:1.5px dashed #a9c2f3;flex:none}
+.logo[style*="url"],.av[style*="url"],.ico[style*="url"]{border-color:transparent}
+.logo{width:42px;height:42px;border-radius:8px}
+.av{width:38px;height:38px;border-radius:8px}
+.ico{width:42px;height:42px;border-radius:8px}
+.top .t{flex:1;line-height:1.1}.top .t b{font-size:18px;font-family:'Archivo Black';color:#fff}.top .t small{display:block;color:var(--b2);font-size:11px;font-weight:700}
+.box{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:0 4px 14px rgba(30,107,255,.06);padding:16px;margin-bottom:18px}
+.hero{position:relative;height:120px;border-radius:10px;box-shadow:0 10px 24px rgba(11,58,143,.28);overflow:hidden;margin-bottom:18px;background:linear-gradient(135deg,var(--b1),var(--b2) 55%,var(--sky)) center/cover}
+.hero .logo{background-color:rgba(255,255,255,.18);border-color:rgba(255,255,255,.65)}
+.hero .cap{position:absolute;inset:auto 0 0 0;padding:30px 16px 14px;background:linear-gradient(transparent,rgba(5,20,60,.85));color:#fff}
+.hero .cap small{color:var(--sky);font-weight:700;letter-spacing:2px;font-size:11px}.hero .cap h2{font-size:21px;margin:2px 0}.hero .cap p{font-size:14px;font-weight:700}
+.strip{display:grid;grid-template-columns:repeat(3,1fr);padding:0}
+.strip div{padding:12px;border-right:1px dashed var(--line)}.strip div:last-child{border:0}
+.strip small{display:block;font-size:10px;color:var(--mut);letter-spacing:1.5px;font-weight:700}.strip b{font-size:14px}
+.sec{display:flex;justify-content:space-between;align-items:center;margin:4px 0 10px}
+.pill{background:#e3edff;color:var(--b1);border-radius:6px;font-size:11px;font-weight:700;padding:4px 10px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.cat{background:#fff;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:0 4px 12px rgba(30,107,255,.06);cursor:pointer}
+.cat .ic{height:48px;background:linear-gradient(135deg,#e3edff,#cfe0ff) center/cover no-repeat}
+.cat .tx{padding:10px 12px 12px}.cat b{font-size:14px}.cat p{font-size:11px;color:var(--mut);margin-top:2px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 10px}
+.chip{flex:none;border:1px solid var(--line);border-radius:6px;background:#fff;padding:7px 13px;font:700 12px 'Space Grotesk',system-ui,sans-serif;color:var(--ink);cursor:pointer}
+.chip.on{background:var(--b2);border-color:var(--b2);color:#fff}
+input,select,textarea{width:100%;border:1.5px solid var(--line);border-radius:6px;padding:12px;font:inherit;background:#fff;margin-bottom:10px;color:var(--ink);outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--b2);box-shadow:0 0 0 3px rgba(30,107,255,.15)}
+input[type=checkbox]{width:20px;height:20px;margin:0;flex:none;accent-color:var(--b2)}
+.btn{background:linear-gradient(135deg,var(--b2),#3b82ff);color:#fff;border:0;border-radius:8px;padding:12px 16px;font:700 14px 'Space Grotesk',system-ui,sans-serif;box-shadow:0 8px 18px rgba(30,107,255,.32);cursor:pointer;width:100%}
+.btn:active{transform:translateY(1px);box-shadow:0 3px 8px rgba(30,107,255,.3)}
+.btn:disabled{opacity:.45;cursor:not-allowed;box-shadow:none;transform:none}
+.btn.sm{width:auto;padding:8px 14px;font-size:12px;border-radius:6px;box-shadow:0 5px 12px rgba(30,107,255,.28)}
+.btn.red{background:linear-gradient(135deg,#e0314b,#f0506a);box-shadow:0 8px 18px rgba(224,49,75,.28)}
+.tool{display:flex;gap:12px;align-items:center;margin-bottom:12px;padding:12px;background:#fff;border:1px solid var(--line);border-radius:var(--r);text-decoration:none;color:inherit;box-shadow:0 3px 10px rgba(30,107,255,.05)}
+.tool b{font-size:14px}.tool p{font-size:12px;color:var(--mut)}
+.burger{flex:none;width:40px;height:40px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.4);border-radius:6px;background:rgba(255,255,255,.12);color:#fff;cursor:pointer;padding:0}
+.burger svg{width:22px;height:22px}
+.scrim{position:fixed;inset:0;background:rgba(2,10,38,.55);opacity:0;pointer-events:none;transition:opacity .2s;z-index:39}
+.scrim.open{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;bottom:0;left:0;width:250px;max-width:80vw;background:#fff;z-index:40;transform:translateX(-102%);transition:transform .22s ease;padding:18px 12px;box-shadow:8px 0 30px rgba(2,10,38,.35);border-radius:0 8px 8px 0}
+.drawer.open{transform:none}
+.drawer .dh{padding:4px 8px 16px;margin-bottom:8px;border-bottom:1px solid var(--line);line-height:1.15}
+.drawer .dh b{font:18px 'Archivo Black',sans-serif}.drawer .dh b i{font-style:normal;color:var(--b2)}
+.drawer .dh small{display:block;color:var(--b2);font-size:11px;font-weight:700;margin-top:2px}
+.di{display:flex;align-items:center;gap:12px;width:100%;border:0;background:none;padding:12px 10px;border-radius:6px;font:700 14px 'Space Grotesk',system-ui,sans-serif;color:var(--ink);cursor:pointer;text-align:left}
+.di svg{width:20px;height:20px;flex:none}
+.di.on{background:#e6efff;color:var(--b2)}
+/* (menu bawah lama, tidak dipakai) */
+nav{position:fixed;left:0;right:0;bottom:calc(18px + env(safe-area-inset-bottom,0px));margin:auto;width:calc(100% - 52px);max-width:400px;background:rgba(255,255,255,.97);border-radius:24px;box-shadow:0 14px 36px rgba(2,10,38,.45);padding:6px;z-index:20}
+nav .in{display:flex;gap:4px;width:100%}
+nav button{flex:1;border:0;background:none;padding:8px 0 6px;border-radius:18px;font:700 10px 'Space Grotesk',system-ui,sans-serif;color:var(--mut);cursor:pointer}
+nav button svg{display:block;margin:0 auto 3px;width:22px;height:22px}
+nav button.on{color:var(--b2);background:#e6efff}
+.chat{height:55vh;overflow-y:auto;padding:4px}.m{max-width:85%;padding:10px 13px;border-radius:8px;margin-bottom:8px;font-size:14px;border:1px solid var(--line);white-space:pre-wrap}
+.m.u{margin-left:auto;background:var(--b2);color:#fff;border-color:var(--b2)}.m.a{background:#fff}
+.row{display:flex;gap:8px;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px dashed var(--soft)}
+.tag{font-size:10px;font-weight:700;background:var(--soft);padding:2px 8px;border-radius:4px;text-transform:uppercase}
+.login{max-width:400px;margin:auto;padding:20px 0}.err{color:#d11;font-size:13px;margin-bottom:8px;min-height:16px}
+/* ---- BADAK SCAN ---- */
+.term{background:var(--ink);color:var(--sky);font:12px/1.7 ui-monospace,Menlo,Consolas,monospace;border-radius:8px;padding:10px 12px;margin-top:12px;min-height:60px}
+.term .ok{color:#4ade80}.term .dim{color:#7f93b8}
+.bar{height:10px;border-radius:6px;background:var(--soft);overflow:hidden;margin-top:12px}
+.bar i{display:block;height:100%;width:0;background:repeating-linear-gradient(45deg,var(--b2) 0 8px,var(--sky) 8px 16px);transition:width .45s ease}
+.ringwrap{position:relative;width:150px;height:150px;margin:4px auto 10px}
+.ring{width:100%;height:100%;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:10}.ring .rb{stroke:var(--soft)}
+.ring .rf{stroke:var(--b2);stroke-linecap:round;transition:stroke-dashoffset 1.3s cubic-bezier(.2,.8,.2,1)}
+.rn{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+.rn b{font:40px 'Archivo Black';line-height:1}.rn small{color:var(--mut);font-weight:700;font-size:11px}
+.meter{margin-top:10px}.meter .l{display:flex;justify-content:space-between;font-size:12px;font-weight:700;margin-bottom:4px}
+.meter .t{height:8px;border-radius:5px;background:var(--soft);overflow:hidden}
+.meter .t i{display:block;height:100%;width:0;background:var(--b2);transition:width 1s ease}
+.age{margin-top:14px;padding:12px;border:1.5px dashed var(--b2);border-radius:8px;background:#f3f8ff;font-size:13px}
+.age b{font:18px 'Archivo Black'}
+.pop{animation:pop .5s ease}@keyframes pop{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}
+/* ---- JADWAL ---- */
+.next{background:linear-gradient(135deg,var(--b1),var(--b2));color:#fff;text-align:center;padding:18px 14px}
+.next small{letter-spacing:2px;font-weight:700;font-size:11px;color:var(--sky)}
+.next .big{font-size:44px;margin:4px 0;font-variant-numeric:tabular-nums}
+.prow{display:flex;justify-content:space-between;padding:11px 4px;border-bottom:1px dashed var(--soft);font-weight:700}
+.prow:last-child{border:0}.prow.on{background:var(--soft);border-radius:6px;padding-left:10px;padding-right:10px;color:var(--b1)}
+.prow span:last-child{font-variant-numeric:tabular-nums}
+#adzbar{position:fixed;top:12px;left:26px;right:26px;max-width:430px;margin:auto;z-index:50;background:var(--b1);color:#fff;border-radius:10px;box-shadow:0 14px 36px rgba(2,10,38,.5);padding:14px;display:flex;gap:10px;align-items:center;justify-content:space-between;font-weight:700;animation:pop .4s}
+/* ---- TOKO ---- */
+.price{font:700 13px 'Space Grotesk';color:var(--b1)}
+.qris{display:block;max-width:260px;width:100%;margin:8px auto;border:1px solid var(--line);border-radius:8px;background:#fff;min-height:120px}
+.tot{font:30px 'Archivo Black';text-align:center;color:var(--b1)}
+.ok2{color:#0a9d55}
+.stp{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px}
+.stp i{font-style:normal;flex:none;width:26px;height:26px;border-radius:6px;background:var(--b2);color:#fff;display:grid;place-items:center;font:700 13px 'Space Grotesk',system-ui,sans-serif}
+.stp b{font-size:14px}.stp p{font-size:12px;color:var(--mut)}
+.ck{display:flex;gap:10px;align-items:flex-start;font-size:13px;margin:12px 0;cursor:pointer}
+
+/* ---- BRAND + LANGUAGE BUTTON ---- */
+.top .t b i,.hero .cap h2 i{font-style:normal}
+.top .t b i{color:var(--sky)}.hero .cap h2 i{color:var(--sky)}
+.lang{display:flex;align-items:center;gap:5px;flex:none;border:1px solid var(--line);border-radius:6px;background:#fff;color:var(--ink);font:700 12px 'Space Grotesk',system-ui,sans-serif;padding:7px 11px;cursor:pointer}
+.lang:active{transform:translateY(1px)}
+.lang svg{width:16px;height:16px;flex:none}
+</style></head><body>
+
+<!-- =====================================================================
+     PENGATURAN: EDIT DI BAGIAN INI SAJA. Ganti isi di dalam tanda kutip "...".
+     Teks yang tampil di layar ditulis berpasangan: ["English", "Indonesia"].
+     Bagian di bawah garis "JANGAN DIUBAH" tidak perlu disentuh.
+     ===================================================================== -->
+<script>
+/* ---------- 1. NAMA APK ----------
+   BADAK + kata Prancis (essor = bangkit/naik pesat, succès = sukses, renom = terkenal).
+   Mau ganti kata Prancisnya? Cukup ubah NAMA, mis. "BADAK Succès" atau "BADAK Renom". */
+const NAMA     = "BADAK Essor";
+const TAGLINE  = "Succès · Renom";                       // tagline Prancis di bawah nama
+const SLOGAN   = ["Rise. Succeed. Be renowned.", "Naik. Sukses. Terkenal."];
+
+/* ---------- 2. GAMBAR (tempel link catbox, kosongkan jika tidak dipakai) ---------- */
+const BACKGROUND = "https://files.catbox.moe/clilyj.jpg";   // gambar latar seluruh halaman
+const LOGO       = "https://files.catbox.moe/p649c4.jpg";   // kosong = slot polos (nanti tinggal tempel link gambar)
+const BANNER     = "https://files.catbox.moe/omqez2.jpg";
+const AVATAR     = "https://files.catbox.moe/p649c4.jpg";
+
+/* ---------- 2b. IKON (kosong = slot polos; tempel link gambar kalau mau ganti) ---------- */
+const IKON_KATEGORI = { fast:"", badakin:"", ai:"", sholat:"", adzan:"", toko:"", server:"" };   // ikon per kategori (id kategori)
+const IKON_MENU     = {};   // opsional per menu, pakai nama Inggris. Contoh: { "Auto Order":"https://...", "Number Check":"https://..." }
+const IKON_PRODUK   = {};   // opsional per produk toko, pakai nama Inggris. Contoh: { "Basic Telegram Bot":"https://..." }
+
+/* ---------- 3. AKUN OWNER ---------- */
+const OWNER_USER = "FLUXO";
+const OWNER_PASS = "123FLUXOBAE";
+
+/* ---------- 4. KONTAK ---------- */
+const TELEGRAM_CHANNEL = "https://t.me/fluxobosmuda";
+const TELEGRAM_OWNER   = "https://t.me/kinkfluxo";
+const WHATSAPP_OWNER   = "https://wa.me/628123456789";
+
+/* ---------- 5. CS AI ---------- */
+const AI_KEY      = "";                    // API key
+const AI_MODEL    = "claude-haiku-5-5";
+const AI_PROVIDER = "anthropic";           // "anthropic" atau "openai"
+const AI_PROMPT   = [
+  "You are a friendly support agent for the " + NAMA + " store. Reply briefly and clearly in English. If you don't know, direct the customer to the owner's contact.",
+  "Kamu adalah CS ramah untuk toko " + NAMA + ". Jawab singkat dan jelas dalam bahasa Indonesia. Jika tidak tahu, arahkan pelanggan ke kontak owner."
+];
+
+/* ---------- 6. TOKO SCRIPT BOT ---------- */
+const QRIS         = "https://files.catbox.moe/7c74m4.jpg";                   // link catbox gambar QRIS
+const KODE_RAHASIA = "ganti-kata-acak-panjang";
+const TOKO_KAT = [   // kategori di toko: [ "id", ["Name EN","Nama ID"] ]
+  ["dasar",  ["Basic","Dasar"]],
+  ["jualan", ["Selling","Jualan"]],
+  ["grup",   ["Groups","Grup"]],
+  ["tools",  ["Tools","Alat"]],
+  ["ai",     ["AI & Media","AI & Media"]]
+];
+const PRODUK = [
+  // [ ["Name EN","Nama ID"], ["Desc EN","Desc ID"], harga, "link file catbox", "id kategori" ],
+  // --- Dasar ---
+  [["Script bot badak v1","Script bot badak v1"],        ["Auto reply, button menu, broadcast","Auto reply, menu tombol, broadcast"],                 10000, "", "dasar"],
+  [["Script bot badak v2","Script bot badak v2"],          ["Answers common questions by keyword","Jawab pertanyaan umum dengan kata kunci"],              15000, "", "dasar"],
+  [["Script bot badak v3","Script bot badak v3"],             ["Greets new members with your own message and buttons","Sambut member baru dengan pesan dan tombol sendiri"], 2500, "", "dasar"],
+  [["Script bot badak v4","Script bot badak v4"],         ["Users open tickets, admin replies from one chat","User buat tiket, admin balas dari satu chat"], 29000, "", "dasar"],
+  // --- Jualan ---
+  [["Premium Telegram Bot","Bot Telegram Premium"],    ["Automated selling + balance system","Jualan otomatis + sistem saldo"],                       30000, "", "jualan"],
+  [["Auto Order Digital Bot","Bot Auto Order Digital"],["Sell accounts, vouchers and files with QRIS","Jual akun, voucher, dan file dengan QRIS"], 35000, "", "jualan"],
+  [["Auto Order Nokos Bot","Bot Auto Order Nokos"],    ["Virtual number OTP shop with balance and QRIS deposit","Toko nomor OTP virtual dengan saldo dan deposit QRIS"], 45000, "", "jualan"],
+  [["PPOB Credit & Data Bot","Bot PPOB Pulsa & Data"], ["Credit, data packages and PLN token orders","Order pulsa, paket data, dan token PLN"],             40000, "", "jualan"],
+  [["Game Top-up Bot","Bot Top Up Game"],              ["Game top-up menu, price list and order tracking","Menu top up game, daftar harga, dan lacak pesanan"], 40000, "", "jualan"],
+  [["Reseller System Bot","Bot Sistem Reseller"],      ["Tiered reseller prices, balance and reports","Harga reseller bertingkat, saldo, dan laporan"],  50000, "", "jualan"],
+  [["QRIS Deposit Bot","Bot Deposit QRIS"],            ["QRIS deposit flow with balance updates","Alur deposit QRIS dengan update saldo"],             35000, "", "jualan"],
+  // --- Grup ---
+  [["Group Guard Bot","Bot Penjaga Grup"],             ["Anti-spam, anti-link, mute and warning system","Anti-spam, anti-link, mute, dan sistem peringatan"], 20000, "", "grup"],
+  [["Captcha Verification Bot","Bot Verifikasi Captcha"],["Verify new members before they can chat","Verifikasi member baru sebelum boleh chat"],           12000, "", "grup"],
+  [["Giveaway & Raffle Bot","Bot Giveaway & Undian"],  ["Run giveaways and pick winners at random","Adakan giveaway dan pilih pemenang secara acak"],     12000, "", "grup"],
+  [["Anonymous Menfess Bot","Bot Menfess Anonim"],     ["Post anonymous messages to a channel","Kirim pesan anonim ke channel"],                       15000, "", "grup"],
+  // --- Tools ---
+  [["Broadcast Pro Bot","Bot Broadcast Pro"],          ["Mass messages with scheduling and buttons","Pesan massal dengan jadwal dan tombol"],          18000, "", "tools"],
+  [["Channel Auto-Post Bot","Bot Auto Post Channel"],  ["Schedule and forward posts to channels","Jadwalkan dan teruskan postingan ke channel"],      15000, "", "tools"],
+  [["Admin Panel & Stats Bot","Bot Panel Admin & Statistik"],["User stats, ban list and admin commands","Statistik user, daftar ban, dan perintah admin"], 25000, "", "tools"],
+  [["Media Downloader Bot","Bot Downloader Media"],    ["Download video and audio from links","Unduh video dan audio dari tautan"],                    25000, "", "tools"],
+  // --- AI & Media ---
+  [["AI Chat Bot","Bot Chat AI"],                      ["Smart Q&A bot, uses your own API key","Bot tanya jawab pintar, pakai API key sendiri"],        30000, "", "ai"],
+  [["AI Image Bot","Bot Gambar AI"],                   ["Create images from text prompts","Buat gambar dari teks"],                                   30000, "", "ai"],
+  [["Sticker Maker Bot","Bot Pembuat Stiker"],         ["Turn photos into Telegram stickers","Ubah foto jadi stiker Telegram"],                       10000, "", "ai"]
+];
+
+/* ---------- 7. ADZAN ---------- */
+const ADZAN_AUDIO = "";                    // link catbox file mp3 adzan
+
+/* ---------- 8. API OPSIONAL (boleh kosong) ---------- */
+const API_BADAKIN = "";                    // endpoint proses Badakin, tulis {nomor} di tempat nomor
+const API_UMUR    = "";                    // endpoint umur nomor, tulis {nomor} di tempat nomor
+
+/* ---------- 9. KATEGORI MENU: [ "id", ["Name EN","Nama ID"], ["Desc EN","Desc ID"] ] ---------- */
+const KATEGORI = [
+  ["fast",    ["Quick","Cepat"],                     ["Instant actions","Aksi instan"]],
+  ["badakin", ["Badakin","Badakin"],                 ["Number processing","Proses nomor"]],
+  ["ai",      ["AI","AI"],                           ["Smart assistant","Asisten pintar"]],
+  ["sholat",  ["Prayer Times","Jadwal Sholat"],      ["Daily prayer schedule","Waktu sholat harian"]],
+  ["adzan",   ["Adzan Schedule","Jadwal Adzan"],     ["Reminders & sound","Pengingat & suara"]],
+  ["toko",    ["Script Shop","Toko Script"],         ["Telegram bots + QRIS","Bot Telegram + QRIS"]],
+  ["server",  ["Server","Server"],                   ["VPS, panel & domain","VPS, panel & domain"]]
+];
+
+/* ---------- 10. DAFTAR MENU: [ nama, deskripsi, "id kategori", "tujuan", "siapa yang boleh lihat" ]
+   nama & deskripsi berpasangan ["EN","ID"].
+   tujuan = link https://... ATAU halaman bawaan: badakin | cek | sholat | adzan | toko
+   siapa  = "member" (semua), "reseller", atau "owner". Boleh dikosongkan = member ---------- */
+const MENU = [
+  [["Auto Order","Auto Order"],                  ["One-click automatic orders","Pesan otomatis sekali klik"],              "fast",    "https://example.com/auto-order"],
+  [["Number Check","Cek Nomor"],                 ["Check number strength & age","Cek kekuatan & umur nomor"],              "fast",    "cek"],
+  [["Badakin Number","Badakin Nomor"],           ["Enter a number, processed automatically","Masukkan nomor, diproses otomatis"], "badakin", "badakin"],
+  [["AI Chat","Chat AI"],                        ["Smart Q&A","Tanya jawab cerdas"],                                       "ai",      "https://example.com/chat-ai"],
+  [["AI Images","Gambar AI"],                    ["Create images from text","Buat gambar dari teks"],                      "ai",      "https://example.com/gambar-ai", "reseller"],
+  [["Prayer Times","Jadwal Sholat"],             ["Prayer times by city","Waktu sholat per kota"],                         "sholat",  "sholat"],
+  [["Adzan Schedule","Jadwal Adzan"],            ["Automatic adzan & notifications","Adzan otomatis & notifikasi"],        "adzan",   "adzan"],
+  [["Telegram Bot Scripts","Script Bot Telegram"],["Buy bot scripts via QRIS","Beli script bot via QRIS"],                "toko",    "toko"],
+  [["Server Panel","Panel Server"],              ["Manage servers","Kelola server"],                                       "server",  "https://example.com/hosting",   "reseller"],
+  [["Domain Check","Cek Domain"],                ["Domain availability","Ketersediaan domain"],                            "server",  "https://example.com/domain"],
+  [["Admin Console","Admin Console"],            ["Owner only","Khusus owner"],                                            "server",  "https://example.com/admin",     "owner"]
+];
+</script>
+
+<!-- ============================ JANGAN DIUBAH ============================ -->
+<script>
+const CONFIG = {
+  nama: NAMA, tagline: TAGLINE, slogan: SLOGAN,
+  img: { logo: LOGO, banner: BANNER, avatar: AVATAR, login: BANNER, bg: BACKGROUND },
+  owner: { user: OWNER_USER, pass: OWNER_PASS },
+  telegramChannel: { url: TELEGRAM_CHANNEL },
+  kontakOwner: { url: TELEGRAM_OWNER, wa: WHATSAPP_OWNER },
+  ai: { provider: AI_PROVIDER, apiKey: AI_KEY, model: AI_MODEL, endpoint: "https://api.openai.com/v1/chat/completions", prompt: AI_PROMPT },
+  api: { umurNomor: API_UMUR, badakin: API_BADAKIN },
+  adzan: { url: ADZAN_AUDIO, urlSubuh: "" },
+  toko: { qris: QRIS, secret: KODE_RAHASIA,
+          produk: PRODUK.map((p,i)=>({ id:"p"+i, nama:p[0], desc:p[1], harga:p[2], file:p[3], kat:p[4]||"", img:IKON_PRODUK[p[0][0]]||"" })),
+          kat: TOKO_KAT.map(k=>({ id:k[0], nama:k[1] })) },
+  kategori: KATEGORI.map(k=>({ id:k[0], nama:k[1], desc:k[2], img:IKON_KATEGORI[k[0]]||"" })),
+  tools: MENU.map(m=>{
+    const pg=["badakin","cek","sholat","adzan","toko"].includes(m[3]);
+    return Object.assign({ nama:m[0], desc:m[1], kat:m[2], min:m[4]||"member", icon:IKON_MENU[m[0][0]]||IKON_KATEGORI[m[2]]||"" }, pg?{page:m[3]}:{url:m[3]});
+  })
+};
+</script>
+
+<div id="app"></div>
+
+<script>
+/* ---------- BAHASA: default Inggris, 1 tombol untuk ganti ke Indonesia ---------- */
+const lsGet=(k,d)=>{try{const v=localStorage.getItem(k);return v===null?d:v}catch(e){return d}};
+const lsSet=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
+let LANG=lsGet("badak_lang","en")==="id"?"id":"en";
+document.documentElement.lang=LANG;
+const L=x=>Array.isArray(x)?x[LANG==="id"?1:0]:x;
+const I18N={
+en:{
+ gateway:"Tools Gateway",
+ signin:"Sign In", user:"Username", pass:"Password", hint:"Enter your username & password correctly.", badlogin:"Wrong username or password.", logout:"Log Out",
+ n_home:"Home", n_menu:"Menu", n_cs:"Support", n_contact:"Contact", n_acc:"Account",
+ role:"ROLE", menuL:"MENU", toolsN:"{n} TOOLS", status:"STATUS", active:"ACTIVE", cats:"Categories", mods:"{n} MODULES",
+ search:"Search tools...", all:"All", notools:"No tools found.",
+ hello:"Hello {u}! How can I help?", typemsg:"Type a message...", send:"Send",
+ cs_off:"Sorry, support is unavailable right now. Please contact the owner via the Contact tab.",
+ cs_err:"Sorry, something went wrong. Please try again later.",
+ cs_net:"Sorry, support can't be reached right now. Please try again later.",
+ contact:"Contact", chan:"{n} Telegram Channel", chan_d:"News, promos and announcements.", open_chan:"Open Channel",
+ own_d:"Contact the owner to buy access or get help.", tg_own:"Telegram Owner", wa_own:"WhatsApp Owner", owner_lbl:"{u} (Owner)",
+ myacc:"MY ACCOUNT", mkacc:"Create Account", acclist:"Account List ({n})", r_reseller:"Reseller", r_member:"Member",
+ noacc:"No accounts yet.", by:"by {u} · {d}", del:"Delete", confdel:"Delete account {u}?",
+ e_res:"Resellers can only create members.", e_short:"Username min. 3 and password min. 4 characters.", e_taken:"Username already taken.",
+ back:"Back", langbtn:"Switch language",
+ /* number check */
+ ck_title:"Number Check", ck_pill:"STRENGTH & AGE", num_ph:"Enter number, e.g. 0812xxxxxxxx",
+ num_bad:"Invalid number. Example: 0812xxxxxxxx or +62812xxxxxxxx",
+ ck_go:"Check Now", working:"Processing...",
+ s_norm:"Normalizing format", s_op:"Detecting operator", s_pat:"Analyzing digit pattern", s_score:"Calculating strength score", s_age:"Checking number age",
+ intl:"International", intl_num:"International number", unrec:"Unrecognized operator",
+ uniq:"{u} unique digits · longest run {m}", score_n:"score {s}", na:"unavailable",
+ m_rep:"Digit repetition", m_seq:"Number sequence", m_tail:"Ending pattern · {x}", m_sym:"Symmetry",
+ t_4:"Quad ending (AAAA)", t_aabb:"AABB pattern", t_abab:"ABAB pattern", t_abba:"ABBA pattern", t_3:"Triple ending", t_00:"Round ending (00)", t_2:"Double ending", t_rand:"Random ending",
+ tier0:"COMMON", tier1:"DECENT", tier2:"STRONG", tier3:"RARE", tier4:"SULTAN",
+ age_l:"NUMBER AGE", age_na:"Not available", age_na_d:"Age data for this number isn't available yet.",
+ age_nd:"Data unavailable", api_err:"The API did not respond.", api_empty:"The API returned no age data for this number.",
+ disc:"Score = digit-pattern rating (how unique/pretty the number is). It is not a guarantee against blocks or bans.",
+ age_ym:"{y} years {m} months", age_md:"{m} months {d} days", age_d:"{d} days",
+ /* badakin */
+ bk_title:"Badakin Number", bk_pill:"PROCESS", bk_go:"Start Badakin", bk_done:"DONE",
+ bk_ok:"SUCCESS! YOUR NUMBER HAS NOW BEEN SENT TO WHATSAPP. LEAVE YOUR NUMBER ALONE FOR 24 HOURS WHILE IT IS PROCESSED.",
+ bk_srv:"Server did not respond. Please try again later.",
+ /* prayer / adzan */
+ sh_title:"Prayer Times", sh_pill:"TODAY", city_ph:"City name, e.g. Bandung", find:"Search",
+ loading:"Loading schedule...", err_prayer:"Failed to load schedule. Check the city name or your internet connection.",
+ toward:"TOWARD {n}", ah:"AH",
+ ad_title:"Adzan Schedule", on:"ON", off:"OFF", ad_auto:"Automatic adzan",
+ ad_desc:"Sound & notification play when prayer time arrives. This page must stay open in the app or browser.",
+ ad_off:"Turn Off Adzan", ad_on:"Turn On Adzan", ad_pick:"Choose which prayers play", ad_test:"Test Sound", ad_testT:"Adzan Test",
+ ad_time:"Time for {n} · {c}", stop:"Stop", nt:"Time for {n}", nb:"It's time to pray {n} in {c}.",
+ /* shop */
+ tk_title:"Bot Script Shop", buy:"Buy", noprod:"No products yet.", myord:"My Orders",
+ nofile:"File not available yet. Contact the owner.", dl:"Download Script", code_ph:"Code from owner", unlock:"Unlock File",
+ badcode:"Wrong code. Ask the owner for a code after your payment is checked.",
+ op:"Owner Panel", op_d:"After confirming a payment, enter the buyer's Order ID to generate an unlock code.",
+ oid_ph:"Order ID, e.g. BDK-AB12C", mkcode:"Generate Code", code_for:"Code for {id}:",
+ noord:"No orders yet.", st_menunggu:"Pending", st_terbuka:"Unlocked",
+ noqris:"QRIS not available yet. Please contact the owner.", payexact:"Pay exactly",
+ uniqc:"The last two digits are a unique code so your payment is easy to verify.",
+ paid:"Send Proof on Telegram", tk_n:"{n} scripts",
+ step1:"Transfer via QRIS", step1d:"Scan the QRIS and pay the exact amount below.",
+ step2:"Send proof on Telegram", step2d:"After you pay, you'll be taken to the owner's Telegram to send your proof.", ckpaid:"I have transferred the exact amount.",
+ flow:"<b>How it works:</b> pay via QRIS, confirm with the owner on Telegram (send proof), the owner gives you a code, enter the code in My Orders, then download the file."
+},
+id:{
+ gateway:"Gerbang Tools",
+ signin:"Masuk", user:"Username", pass:"Password", hint:"Masukkan username & password dengan benar.", badlogin:"Username atau password salah.", logout:"Keluar",
+ n_home:"Beranda", n_menu:"Menu", n_cs:"CS", n_contact:"Kontak", n_acc:"Akun",
+ role:"PERAN", menuL:"MENU", toolsN:"{n} TOOLS", status:"STATUS", active:"AKTIF", cats:"Kategori", mods:"{n} MODUL",
+ search:"Cari tools...", all:"Semua", notools:"Tidak ada tools.",
+ hello:"Halo {u}! Ada yang bisa dibantu?", typemsg:"Tulis pesan...", send:"Kirim",
+ cs_off:"Maaf, CS sedang tidak tersedia saat ini. Silakan hubungi owner lewat menu Kontak.",
+ cs_err:"Maaf, terjadi gangguan. Coba lagi nanti.",
+ cs_net:"Maaf, CS sedang tidak bisa dihubungi. Coba lagi nanti.",
+ contact:"Kontak", chan:"Channel Telegram {n}", chan_d:"Info update, promo, dan pengumuman.", open_chan:"Buka Channel",
+ own_d:"Hubungi owner untuk beli akses atau bantuan.", tg_own:"Telegram Owner", wa_own:"WhatsApp Owner", owner_lbl:"{u} (Owner)",
+ myacc:"AKUN SAYA", mkacc:"Buat Akun", acclist:"Daftar Akun ({n})", r_reseller:"Reseller", r_member:"Member",
+ noacc:"Belum ada akun.", by:"oleh {u} · {d}", del:"Hapus", confdel:"Hapus akun {u}?",
+ e_res:"Reseller hanya bisa membuat member.", e_short:"Username min 3, password min 4 karakter.", e_taken:"Username sudah dipakai.",
+ back:"Kembali", langbtn:"Ganti bahasa",
+ ck_title:"Cek Nomor", ck_pill:"KEKUATAN & UMUR", num_ph:"Masukkan nomor, mis. 0812xxxxxxxx",
+ num_bad:"Nomor tidak valid. Contoh: 0812xxxxxxxx atau +62812xxxxxxxx",
+ ck_go:"Cek Sekarang", working:"Memproses...",
+ s_norm:"Normalisasi format", s_op:"Deteksi operator", s_pat:"Bedah pola digit", s_score:"Hitung skor kekuatan", s_age:"Cek umur nomor",
+ intl:"Internasional", intl_num:"Nomor internasional", unrec:"Operator tidak dikenali",
+ uniq:"{u} digit unik · beruntun maks {m}", score_n:"skor {s}", na:"tidak tersedia",
+ m_rep:"Pengulangan digit", m_seq:"Urutan angka", m_tail:"Pola ujung · {x}", m_sym:"Simetri",
+ t_4:"Ujung kembar 4 (AAAA)", t_aabb:"Pola AABB", t_abab:"Pola ABAB", t_abba:"Pola ABBA", t_3:"Ujung kembar 3", t_00:"Ujung ratusan/ribuan", t_2:"Ujung kembar 2", t_rand:"Ujung acak",
+ tier0:"BIASA", tier1:"LUMAYAN", tier2:"KUAT", tier3:"LANGKA", tier4:"SULTAN",
+ age_l:"UMUR NOMOR", age_na:"Tidak tersedia", age_na_d:"Data umur untuk nomor ini belum tersedia.",
+ age_nd:"Data tidak tersedia", api_err:"API tidak merespons.", api_empty:"API tidak mengembalikan data umur untuk nomor ini.",
+ disc:"Skor = penilaian pola digit (seberapa unik/cantik nomornya). Ini bukan jaminan nomor tahan blokir atau banned.",
+ age_ym:"{y} tahun {m} bulan", age_md:"{m} bulan {d} hari", age_d:"{d} hari",
+ bk_title:"Badakin Nomor", bk_pill:"PROSES", bk_go:"Mulai Badakin", bk_done:"SELESAI",
+ bk_ok:"BERHASIL!, SEKARANG NOMOR KAMU SUDAH TERKIRIM KE PIHAK WHATSAPP. DIAMKAN NOMOR KAMU BIARKAN SELAMA 24 JAM SEDANG DI PROSES",
+ bk_srv:"Server tidak merespons. Coba lagi nanti.",
+ sh_title:"Jadwal Sholat", sh_pill:"HARI INI", city_ph:"Nama kota, mis. Bandung", find:"Cari",
+ loading:"Memuat jadwal...", err_prayer:"Gagal memuat jadwal. Cek nama kota atau koneksi internet.",
+ toward:"MENUJU {n}", ah:"H",
+ ad_title:"Jadwal Adzan", on:"AKTIF", off:"MATI", ad_auto:"Adzan otomatis",
+ ad_desc:"Suara & notifikasi berbunyi saat waktu sholat tiba. Halaman ini harus tetap terbuka di aplikasi atau browser.",
+ ad_off:"Matikan Adzan", ad_on:"Aktifkan Adzan", ad_pick:"Pilih waktu yang dibunyikan", ad_test:"Tes Suara", ad_testT:"Tes Adzan",
+ ad_time:"Waktu {n} · {c}", stop:"Stop", nt:"Waktu {n}", nb:"Saatnya sholat {n} untuk wilayah {c}",
+ tk_title:"Toko Script Bot", buy:"Beli", noprod:"Belum ada produk.", myord:"Pesanan Saya",
+ nofile:"File belum tersedia. Hubungi owner.", dl:"Download Script", code_ph:"Kode dari owner", unlock:"Buka File",
+ badcode:"Kode salah. Minta kode ke owner setelah pembayaran dicek.",
+ op:"Panel Owner", op_d:"Setelah cek pembayaran masuk, masukkan Order ID dari pembeli untuk membuat kode buka file.",
+ oid_ph:"Order ID, mis. BDK-AB12C", mkcode:"Buat Kode", code_for:"Kode untuk {id}:",
+ noord:"Belum ada pesanan.", st_menunggu:"Menunggu", st_terbuka:"Terbuka",
+ noqris:"QRIS belum tersedia. Silakan hubungi owner.", payexact:"Bayar tepat sebesar",
+ uniqc:"Dua digit terakhir adalah kode unik supaya pembayaranmu mudah dicek.",
+ paid:"Kirim Bukti ke Telegram", tk_n:"{n} script",
+ step1:"Transfer via QRIS", step1d:"Scan QRIS lalu bayar sesuai nominal di bawah.",
+ step2:"Kirim bukti ke Telegram", step2d:"Setelah transfer, kamu diarahkan ke Telegram owner untuk kirim bukti.", ckpaid:"Saya sudah transfer sesuai nominal.",
+ flow:"<b>Alur:</b> bayar QRIS, konfirmasi ke owner di Telegram (kirim bukti), owner kasih kode, masukkan kode di Pesanan Saya, lalu file bisa diunduh."
+}};
+const t=(k,v)=>{let s=(I18N[LANG][k]!==undefined?I18N[LANG][k]:(I18N.en[k]!==undefined?I18N.en[k]:k));if(v)for(const a in v)s=s.split("{"+a+"}").join(v[a]);return s};
+const locale=()=>LANG==="id"?"id-ID":"en-US";
+
+/* ---------- DATABASE (localStorage) ---------- */
+const DB = {
+  key: "badak_db_v1", sk: "badak_session_v1",
+  load(){ try{ return JSON.parse(localStorage.getItem(this.key)) }catch(e){ return null } },
+  save(d){ localStorage.setItem(this.key, JSON.stringify(d)) },
+  session(){ return localStorage.getItem(this.sk) },
+  setSession(u){ u ? localStorage.setItem(this.sk,u) : localStorage.removeItem(this.sk) }
+};
+async function hash(s){
+  try{ const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode("badak:"+s)); return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("") }
+  catch(e){ let h=5381; for(const c of "badak:"+s) h=((h<<5)+h)+c.charCodeAt(0); return "f"+(h>>>0).toString(16) }
+}
+let db, me=null, page="home", catSel="all", q="", chat=[];
+const RANK={member:1,reseller:2,owner:3};
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const img=u=>u&&!/GANTI_/.test(u)?`background-image:url('${esc(u)}')`:"";
+
+async function initDB(){
+  db=DB.load()||{users:[]};
+  const oh=await hash(CONFIG.owner.pass);
+  const o=db.users.find(u=>u.role==="owner");
+  if(!o) db.users.push({user:CONFIG.owner.user,pass:oh,role:"owner",by:"-",at:Date.now()});
+  else { o.user=CONFIG.owner.user; o.pass=oh; }
+  DB.save(db);
+  const s=DB.session(); me=s?db.users.find(u=>u.user===s)||null:null;
+}
+
+/* ---------- ICONS ---------- */
+const P={home:"M3 11l9-8 9 8v10H3z",grid:"M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z",chat:"M4 4h16v12H8l-4 4z",scan:"M11 4a7 7 0 100 14 7 7 0 000-14zM21 21l-5-5",phone:"M5 3h4l2 5-2 1a11 11 0 006 6l1-2 5 2v4a2 2 0 01-2 2A16 16 0 013 5a2 2 0 012-2z",user:"M12 12a4 4 0 100-8 4 4 0 000 8zM4 21a8 8 0 0116 0z",menu:"M4 6h16M4 12h16M4 18h16",globe:"M12 3a9 9 0 100 18 9 9 0 000-18zM3 12h18M12 3c3.2 3 3.2 15 0 18M12 3c-3.2 3-3.2 15 0 18"};
+const ic=n=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="${P[n]}"/></svg>`;
+
+/* ---------- APK / PWA: manifest + warna status bar ---------- */
+function setupApp(){
+  try{
+    const th=document.createElement("meta");th.name="theme-color";th.content="#0b3a8f";document.head.appendChild(th);
+    const icons=[];
+    if(CONFIG.img.logo) icons.push({src:CONFIG.img.logo,sizes:"192x192",purpose:"any"});
+    const man={name:CONFIG.nama,short_name:"BADAK",description:CONFIG.nama,start_url:".",display:"standalone",background_color:"#0b3a8f",theme_color:"#0b3a8f",icons};
+    const l=document.createElement("link");l.rel="manifest";
+    l.href=URL.createObjectURL(new Blob([JSON.stringify(man)],{type:"application/manifest+json"}));
+    document.head.appendChild(l);
+  }catch(e){}
+}
+
+/* ---------- BAHASA: 1 tombol ---------- */
+const langBtn=full=>`<button class="lang" onclick="setLang()" title="${esc(t("langbtn"))}" aria-label="${esc(t("langbtn"))}">${ic("globe")}<span>${full?(LANG==="en"?"Bahasa Indonesia":"English"):(LANG==="en"?"ID":"EN")}</span></button>`;
+function setLang(){
+  const vals={};document.querySelectorAll("input[id]").forEach(i=>vals[i.id]=i.value);
+  LANG=LANG==="en"?"id":"en";lsSet("badak_lang",LANG);document.documentElement.lang=LANG;
+  render();
+  for(const id in vals){const e=document.getElementById(id);if(e&&e.tagName==="INPUT") e.value=vals[id]}
+}
+const nameHtml=()=>{const p=CONFIG.nama.split(" ");return esc(p[0])+(p.length>1?` <i>${esc(p.slice(1).join(" "))}</i>`:"")};
+
+/* ---------- RENDER ---------- */
+const $=s=>document.querySelector(s);
+function render(){
+  if(CONFIG.img.bg&&!/GANTI_/.test(CONFIG.img.bg)) document.body.style.backgroundImage="url('"+CONFIG.img.bg+"')";
+  document.title=CONFIG.nama;
+  if(!me) return login();
+  const tabs=[["home",t("n_home"),"home"],["menu",t("n_menu"),"grid"],["cs",t("n_cs"),"chat"],["kontak",t("n_contact"),"phone"],["akun",t("n_acc"),"user"]];
+  $("#app").innerHTML=`
+  <div class="top"><button class="burger" onclick="toggleNav()" aria-label="Menu">${ic("menu")}</button><div class="logo" style="${img(CONFIG.img.logo)}"></div>
+    <div class="t"><b>${nameHtml()}</b></div>
+    ${langBtn(false)}${CONFIG.img.avatar?`<div class="av" style="${img(CONFIG.img.avatar)}"></div>`:""}</div>
+  <div id="pg">${views[page]()}</div>
+  <div class="scrim" onclick="toggleNav()"></div>
+  <aside class="drawer"><div class="dh"><b>${nameHtml()}</b></div>${tabs.map(x=>`<button class="di ${page===x[0]||(x[0]==="menu"&&["badakin","cek","sholat","adzan","toko"].includes(page))?"on":""}" onclick="go('${x[0]}')">${ic(x[2])}<span>${x[1]}</span></button>`).join("")}</aside>`;
+  if(page==="cs") scrollChat();
+  if(window.afterRender) afterRender();
+}
+function openTG(msg){const u=CONFIG.kontakOwner.url+(msg?"?text="+encodeURIComponent(msg):"");if(!window.open(u,"_blank"))location.href=u}
+function toggleNav(){document.querySelectorAll(".drawer,.scrim").forEach(e=>e.classList.toggle("open"))}
+function closeNav(){document.querySelectorAll(".drawer,.scrim").forEach(e=>e.classList.remove("open"))}
+function go(p){if(p==="kontak"){closeNav();openTG();return}page=p;render();window.scrollTo(0,0)}
+const myTools=()=>CONFIG.tools.filter(x=>RANK[me.role]>=RANK[x.min||"member"]);
+const dateStr=ts=>new Date(ts).toLocaleDateString(locale());
+
+const views={
+home(){
+  return `<div class="hero" style="${img(CONFIG.img.banner)}"></div>
+  <div class="box strip"><div><small>${t("role")}</small><b>${me.role.toUpperCase()}</b></div><div><small>${t("menuL")}</small><b>${t("toolsN",{n:myTools().length})}</b></div><div><small>${t("status")}</small><b style="color:#0a9d55">${t("active")}</b></div></div>
+  <div class="sec"><h3>${t("cats")}</h3><span class="pill">${t("mods",{n:CONFIG.kategori.length})}</span></div>
+  <div class="grid">${CONFIG.kategori.map(k=>{const nm=L(k.nama);return `<div class="cat" onclick="catSel='${k.id}';go('menu')"><div class="ic" style="${img(k.img)}"></div><div class="tx"><b>${esc(nm)}</b><p>${esc(L(k.desc))}</p></div></div>`}).join("")}</div>`;
+},
+menu(){
+  const list=myTools().filter(x=>(catSel==="all"||x.kat===catSel)&&(L(x.nama)+L(x.desc)).toLowerCase().includes(q.toLowerCase()));
+  return `<input placeholder="${esc(t("search"))}" value="${esc(q)}" oninput="q=this.value;keep(()=>render())">
+  <div class="chips"><button class="chip ${catSel==="all"?"on":""}" onclick="catSel='all';render()">${t("all")}</button>${CONFIG.kategori.map(k=>`<button class="chip ${catSel===k.id?"on":""}" onclick="catSel='${k.id}';render()">${esc(L(k.nama))}</button>`).join("")}</div>
+  ${list.map(x=>`<a class="tool" ${x.page?`href="javascript:void(0)" onclick="go('${x.page}')"`:`href="${esc(x.url)}" target="_blank" rel="noopener"`}><div class="ico" style="${img(x.icon)}"></div><div><b>${esc(L(x.nama))}</b><p>${esc(L(x.desc))}</p></div></a>`).join("")||`<div class="box">${t("notools")}</div>`}`;
+},
+cs(){
+  return `<div class="sec"><h3>CS ${esc(CONFIG.nama)}</h3><span class="pill">AI</span></div>
+  <div class="box"><div class="chat" id="chat">${chat.length?chat.map(m=>`<div class="m ${m.role==="user"?"u":"a"}">${esc(m.content)}</div>`).join(""):`<div class="m a">${esc(t("hello",{u:me.user}))}</div>`}</div>
+  <div style="display:flex;gap:8px;margin-top:10px"><input id="ci" style="margin:0" placeholder="${esc(t("typemsg"))}" onkeydown="if(event.key==='Enter')sendCS()"><button class="btn sm" style="width:80px" onclick="sendCS()">${t("send")}</button></div></div>`;
+},
+kontak(){
+  const c=CONFIG.kontakOwner,tg=CONFIG.telegramChannel;
+  return `<div class="sec"><h3>${t("contact")}</h3></div>
+  <div class="box"><b>${esc(t("chan",{n:CONFIG.nama}))}</b><p style="color:var(--mut);font-size:13px;margin:4px 0 10px">${t("chan_d")}</p><a href="${esc(tg.url)}" target="_blank"><button class="btn">${t("open_chan")}</button></a></div>
+  <div class="box"><b>${esc(t("owner_lbl",{u:OWNER_USER}))}</b><p style="color:var(--mut);font-size:13px;margin:4px 0 10px">${t("own_d")}</p>
+  <a href="${esc(c.url)}" target="_blank"><button class="btn" style="margin-bottom:8px">${t("tg_own")}</button></a>${c.wa?`<a href="${esc(c.wa)}" target="_blank"><button class="btn">${t("wa_own")}</button></a>`:""}</div>`;
+},
+akun(){
+  const canAdd=me.role!=="member";
+  const vis=db.users.filter(u=>me.role==="owner"?u.user!==me.user:u.by===me.user);
+  return `<div class="box"><small style="color:var(--mut);font-weight:700;letter-spacing:1.5px">${t("myacc")}</small><h3 style="margin:4px 0">${esc(me.user)}</h3><span class="tag">${me.role}</span>
+  <button class="btn red" style="margin-top:14px" onclick="DB.setSession(null);me=null;render()">${t("logout")}</button></div>
+  ${canAdd?`<div class="box"><h3 style="margin-bottom:10px">${t("mkacc")}</h3>
+  <input id="nu" placeholder="${esc(t("user"))}" autocapitalize="off"><input id="np" placeholder="${esc(t("pass"))}">
+  <select id="nr">${me.role==="owner"?`<option value="reseller">${t("r_reseller")}</option><option value="member">${t("r_member")}</option>`:`<option value="member">${t("r_member")}</option>`}</select>
+  <div class="err" id="ne"></div><button class="btn" onclick="addUser()">${t("mkacc")}</button></div>
+  <div class="box"><h3 style="margin-bottom:6px">${t("acclist",{n:vis.length})}</h3>${vis.map(u=>`<div class="row"><div><b>${esc(u.user)}</b> <span class="tag">${u.role}</span><br><small style="color:var(--mut)">${esc(t("by",{u:u.by,d:dateStr(u.at)}))}</small></div><button class="btn sm red" onclick="delUser('${esc(u.user)}')">${t("del")}</button></div>`).join("")||`<p style='color:var(--mut)'>${t("noacc")}</p>`}</div>`:""}`;
+}};
+function keep(fn){const el=document.activeElement,p=el.selectionStart;fn();const n=$("#pg input");if(n){n.focus();n.setSelectionRange(p,p)}}
+
+/* ---------- LOGIN ---------- */
+function login(){
+  $("#app").innerHTML=`<div class="login"><div style="display:flex;justify-content:flex-end;margin-bottom:10px">${langBtn(true)}</div>
+  <div class="hero" style="height:170px;${img(CONFIG.img.login||CONFIG.img.banner)}"><div class="logo" style="position:absolute;top:14px;left:14px;width:56px;height:56px;${img(CONFIG.img.logo)}"></div><div class="cap"><h2>${nameHtml()}</h2></div></div>
+  <div class="box"><h3 style="margin-bottom:4px">${t("signin")}</h3><p style="color:var(--mut);font-size:12px;margin-bottom:12px">${t("hint")}</p>
+  <input id="lu" placeholder="${esc(t("user"))}" autocapitalize="off"><input id="lp" type="password" placeholder="${esc(t("pass"))}" onkeydown="if(event.key==='Enter')doLogin()">
+  <div class="err" id="le"></div><button class="btn" onclick="doLogin()">${t("signin")}</button></div></div>`;
+}
+async function doLogin(){
+  const u=$("#lu").value.trim(),p=await hash($("#lp").value);
+  const f=db.users.find(x=>x.user.toLowerCase()===u.toLowerCase()&&x.pass===p);
+  if(!f) return $("#le").textContent=t("badlogin");
+  me=f;DB.setSession(f.user);page="home";render();
+}
+
+/* ---------- KELOLA AKUN ---------- */
+async function addUser(){
+  const u=$("#nu").value.trim(),p=$("#np").value,r=$("#nr").value,e=$("#ne");
+  if(me.role==="reseller"&&r!=="member") return e.textContent=t("e_res");
+  if(me.role==="member") return;
+  if(u.length<3||p.length<4) return e.textContent=t("e_short");
+  if(db.users.some(x=>x.user.toLowerCase()===u.toLowerCase())) return e.textContent=t("e_taken");
+  db.users.push({user:u,pass:await hash(p),role:r,by:me.user,at:Date.now()});DB.save(db);render();
+}
+function delUser(u){
+  const x=db.users.find(y=>y.user===u);
+  if(!x||x.role==="owner"||(me.role!=="owner"&&x.by!==me.user)) return;
+  if(!confirm(t("confdel",{u}))) return;
+  db.users=db.users.filter(y=>y.user!==u);DB.save(db);render();
+}
+
+/* ---------- CS AI ---------- */
+function scrollChat(){const c=$("#chat");if(c)c.scrollTop=c.scrollHeight}
+async function sendCS(){
+  const i=$("#ci"),tx=i.value.trim();if(!tx)return;
+  chat.push({role:"user",content:tx});render();
+  const A=CONFIG.ai,sys=L(A.prompt);let out;
+  if(!A.apiKey){out=t("cs_off");}
+  else try{
+    const msgs=chat.slice(-12);let r,d;
+    if(A.provider==="anthropic"){
+      r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"content-type":"application/json","x-api-key":A.apiKey,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:A.model,max_tokens:800,system:sys,messages:msgs})});
+      d=await r.json();out=(d.content&&d.content[0]&&d.content[0].text)||t("cs_err");
+    }else{
+      r=await fetch(A.endpoint,{method:"POST",headers:{"content-type":"application/json","authorization":"Bearer "+A.apiKey},body:JSON.stringify({model:A.model,messages:[{role:"system",content:sys},...msgs]})});
+      d=await r.json();out=(d.choices&&d.choices[0]&&d.choices[0].message&&d.choices[0].message.content)||t("cs_err");
+    }
+  }catch(e){out=t("cs_net")}
+  chat.push({role:"assistant",content:out});render();
+}
+
+/* =====================================================================
+   FITUR: NUMBER CHECK · PRAYER TIMES · ADZAN · SCRIPT SHOP · BADAKIN
+   ===================================================================== */
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const rp=n=>"Rp "+Number(n).toLocaleString(locale());
+const noGanti=u=>!u||/GANTI_/.test(u);
+const backBtn=()=>`<button class="chip" style="margin-bottom:10px" onclick="go('menu')">${t("back")}</button>`;
+
+function afterRender(){
+  if(page==="cek"&&bd.res) badakAnimate(bd.res);
+  if(page==="sholat"||page==="adzan") ensureSholat();
+}
+
+/* ---------------- NUMBER CHECK ---------------- */
+let bd={num:"",running:false,res:null};
+const OPS=[["Telkomsel",[811,812,813,821,822,823,852,853]],["by.U (Telkomsel)",[851]],["Indosat",[814,815,816,855,856,857,858]],["XL",[817,818,819,859,877,878]],["Axis",[831,832,833,838]],["Tri",[895,896,897,898,899]],["Smartfren",[881,882,883,884,885,886,887,888,889]]];
+const opOf=s=>{const p=+s.slice(0,3);const f=OPS.find(o=>o[1].includes(p));return f?f[0]:null};
+const opText=n=>n.id?(opOf(n.sub)||t("unrec")):t("intl_num");
+
+function normNum(raw){
+  const s=String(raw).trim(),plus=s.startsWith("+");
+  let d=s.replace(/\D/g,"");
+  if(!d) return null;
+  if(d.startsWith("0")) d="62"+d.slice(1);
+  else if(!plus&&d.startsWith("8")) d="62"+d;
+  if(d.startsWith("62")){
+    const sub=d.slice(2);
+    if(sub.length<9||sub.length>12||sub[0]!=="8") return null;
+    return {sub,full:d,id:true};
+  }
+  if(d.length<8||d.length>15) return null;
+  return {sub:d,full:d,id:false};
+}
+const fmtNum=n=>n.id?`+62 ${n.sub.slice(0,3)}-${n.sub.slice(3,7)}-${n.sub.slice(7)}`:`+${n.full}`;
+
+function analyze(sub){
+  const dg=sub.split("").map(Number);
+  let maxRun=1,run=1,asc=1,desc=1,seq=1;
+  for(let i=1;i<dg.length;i++){
+    run=dg[i]===dg[i-1]?run+1:1;maxRun=Math.max(maxRun,run);
+    asc=dg[i]===dg[i-1]+1?asc+1:1;desc=dg[i]===dg[i-1]-1?desc+1:1;seq=Math.max(seq,asc,desc);
+  }
+  const uniq=new Set(dg).size,tl=sub.slice(-4),rev=x=>x.split("").reverse().join("");
+  let tail=0,tailKey="t_rand";
+  if(/^(\d)\1{3}$/.test(tl)){tail=100;tailKey="t_4"}
+  else if(/^(\d)\1(\d)\2$/.test(tl)){tail=85;tailKey="t_aabb"}
+  else if(/^(\d)(\d)\1\2$/.test(tl)){tail=80;tailKey="t_abab"}
+  else if(/^(\d)(\d)\2\1$/.test(tl)){tail=75;tailKey="t_abba"}
+  else if(/(\d)\1\1$/.test(sub)){tail=65;tailKey="t_3"}
+  else if(/00$/.test(tl)){tail=55;tailKey="t_00"}
+  else if(/(\d)\1$/.test(sub)){tail=35;tailKey="t_2"}
+  const l6=sub.slice(-6);
+  const sym=l6===rev(l6)?90:(tl===rev(tl)?60:0);
+  const rep=Math.min(100,(maxRun-1)*30+Math.max(0,8-uniq)*12);
+  const seqS=seq>=3?Math.min(100,(seq-2)*35):0;
+  const score=Math.round(Math.min(100,12+rep*.28+seqS*.22+tail*.34+sym*.16));
+  const tier=score<30?0:score<50?1:score<70?2:score<85?3:4;
+  return {score,tier,rep,seq:seqS,tail,tailKey,sym,uniq,maxRun};
+}
+
+function ageText(d){
+  const y=Math.floor(d/365),m=Math.floor((d%365)/30);
+  return y>0?t("age_ym",{y,m}):m>0?t("age_md",{m,d:d%30}):t("age_d",{d});
+}
+async function fetchAge(n){
+  const u=CONFIG.api&&CONFIG.api.umurNomor;
+  if(!u) return {state:"noapi"};
+  try{
+    const ctl=new AbortController();setTimeout(()=>ctl.abort(),8000);
+    const r=await fetch(u.replace("{nomor}",encodeURIComponent(n.full)),{signal:ctl.signal});
+    const d=await r.json();
+    let days=d.age_days!=null?d.age_days:d.umur_hari;
+    const since=d.since||d.registered||d.terdaftar;
+    if(days==null&&since){const tm=new Date(since).getTime();if(!isNaN(tm)) days=Math.floor((Date.now()-tm)/864e5)}
+    return days==null?{state:"empty"}:{state:"ok",days:Math.max(0,+days)};
+  }catch(e){return {state:"err"}}
+}
+
+function badakResult(r){
+  const bars=[[t("m_rep"),r.a.rep],[t("m_seq"),r.a.seq],[t("m_tail",{x:t(r.a.tailKey)}),r.a.tail],[t("m_sym"),r.a.sym]];
+  const lab=`<small style="color:var(--mut);font-weight:700;letter-spacing:1.5px">${t("age_l")}</small><br>`;
+  let age;
+  if(r.age.state==="ok") age=`${lab}<b>${esc(ageText(r.age.days))}</b>`;
+  else if(r.age.state==="noapi") age=`${lab}<b>${t("age_na")}</b><p style="color:var(--mut);margin-top:4px">${t("age_na_d")}</p>`;
+  else age=`${lab}<b>${t("age_nd")}</b><p style="color:var(--mut);margin-top:4px">${r.age.state==="err"?t("api_err"):t("api_empty")}</p>`;
+  return `<div class="box pop"><div class="ringwrap"><svg viewBox="0 0 100 100" class="ring"><circle cx="50" cy="50" r="42" class="rb"/><circle cx="50" cy="50" r="42" class="rf" id="rf" stroke-dasharray="263.9" stroke-dashoffset="263.9"/></svg><div class="rn"><b id="rsc">0</b><small>/ 100</small></div></div>
+  <div style="text-align:center"><span class="pill">${t("tier"+r.a.tier)}</span><h3 style="margin:8px 0 2px">${esc(fmtNum(r.n))}</h3><p style="color:var(--mut);font-size:13px">${esc(opText(r.n))}</p></div>
+  ${bars.map(b=>`<div class="meter"><div class="l"><span>${esc(b[0])}</span><span>${b[1]}</span></div><div class="t"><i data-w="${b[1]}"></i></div></div>`).join("")}
+  <div class="age">${age}</div>
+  <p style="color:var(--mut);font-size:11px;margin-top:10px">${t("disc")}</p></div>`;
+}
+function badakAnimate(r){
+  setTimeout(()=>{
+    const rf=$("#rf");if(!rf) return;
+    rf.style.strokeDashoffset=263.9*(1-r.a.score/100);
+    document.querySelectorAll(".meter i").forEach(i=>i.style.width=i.dataset.w+"%");
+    const el=$("#rsc"),t0=performance.now();
+    (function f(tm){const p=Math.min(1,(tm-t0)/1300);if(el)el.textContent=Math.round(r.a.score*p);if(p<1)requestAnimationFrame(f)})(t0);
+  },60);
+}
+async function badakScan(){
+  if(bd.running) return;
+  const inp=$("#bn"),err=$("#berr");bd.num=inp.value;err.textContent="";
+  const n=normNum(inp.value);
+  if(!n){err.textContent=t("num_bad");return}
+  bd.running=true;bd.res=null;$("#bres").innerHTML="";
+  const btn=$("#bgo");btn.textContent=t("working");btn.style.opacity=".6";
+  const prog=$("#bprog"),bar=$("#bbar"),log=$("#blog");prog.style.display="block";log.innerHTML="";bar.style.width="0";
+  const line=h=>{const d=document.createElement("div");d.innerHTML=h;log.appendChild(d);return d};
+  const steps=[["s_norm",()=>fmtNum(n),450],["s_op",()=>n.id?(opOf(n.sub)||t("unrec")):t("intl"),500],["s_pat",()=>"",650],["s_score",()=>"",600],["s_age",()=>"",300]];
+  let a,age;
+  for(let i=0;i<steps.length;i++){
+    const [lb,resFn,ms]=steps[i];
+    const d=line(`<span class="dim">&gt;</span> ${esc(t(lb))}...`);
+    bar.style.width=((i+.5)/steps.length*100)+"%";
+    if(i===2) a=analyze(n.sub);
+    if(i===4) age=await fetchAge(n);
+    await sleep(ms);
+    let extra=resFn();
+    if(i===2) extra=t("uniq",{u:a.uniq,m:a.maxRun});
+    if(i===3) extra=t("score_n",{s:a.score});
+    if(i===4) extra=age.state==="ok"?ageText(age.days):t("na");
+    d.innerHTML=`<span class="ok">OK</span> ${esc(t(lb))} <span class="dim">${esc(extra)}</span>`;
+    bar.style.width=((i+1)/steps.length*100)+"%";
+  }
+  await sleep(300);
+  bd.res={a,age,n};
+  bd.running=false;btn.textContent=t("ck_go");btn.style.opacity="1";
+  prog.style.display="none";
+  $("#bres").innerHTML=badakResult(bd.res);badakAnimate(bd.res);
+}
+
+/* ---------------- PRAYER TIMES ---------------- */
+const PRN={Imsak:["Imsak","Imsak"],Fajr:["Fajr","Subuh"],Sunrise:["Sunrise","Terbit"],Dhuhr:["Dhuhr","Dzuhur"],Asr:["Asr","Ashar"],Maghrib:["Maghrib","Maghrib"],Isha:["Isha","Isya"]};
+const pnm=k=>PRN[k][LANG==="id"?1:0];
+const PR=["Fajr","Dhuhr","Asr","Maghrib","Isha"];
+const PX=["Imsak","Fajr","Sunrise","Dhuhr","Asr","Maghrib","Isha"];
+const dk=()=>{const d=new Date();return `${String(d.getDate()).padStart(2,"0")}-${String(d.getMonth()+1).padStart(2,"0")}-${d.getFullYear()}`};
+let SH={city:lsGet("badak_city","Jakarta"),data:null,key:"",err:"",loading:false,hijri:null};
+
+async function ensureSholat(force){
+  const key=SH.city.toLowerCase()+"|"+dk();
+  if(SH.loading||(!force&&SH.err)||(!force&&SH.key===key&&SH.data)) return;
+  SH.loading=true;SH.err="";if(force) SH.data=null;
+  if(page==="sholat"||page==="adzan") render();
+  try{
+    // method=20 = Kemenag RI (Aladhan). Jika kota tidak ditemukan API mengembalikan error.
+    const r=await fetch(`https://api.aladhan.com/v1/timingsByCity/${dk()}?city=${encodeURIComponent(SH.city)}&country=Indonesia&method=20`);
+    const j=await r.json();
+    if(j.code!==200||!j.data) throw new Error("x");
+    SH.data=j.data.timings;SH.key=key;
+    const h=j.data.date.hijri;SH.hijri={d:h.day,m:h.month.en,y:h.year};
+  }catch(e){SH.err="err_prayer"}
+  SH.loading=false;
+  if(page==="sholat"||page==="adzan") render();
+}
+function setCity(){
+  const v=$("#sc").value.trim();if(!v) return;
+  SH.city=v;lsSet("badak_city",v);SH.err="";SH.data=null;SH.key="";ensureSholat(true);
+}
+const hm=x=>String(x).slice(0,5);
+function nextPr(){
+  if(!SH.data) return null;
+  const now=new Date(),y=now.getFullYear(),mo=now.getMonth(),d=now.getDate();
+  for(const k of PR){const [h,m]=hm(SH.data[k]).split(":").map(Number);const tm=new Date(y,mo,d,h,m,0);if(tm>now) return {k,t:tm}}
+  const [h,m]=hm(SH.data.Fajr).split(":").map(Number);
+  return {k:"Fajr",t:new Date(y,mo,d+1,h,m,0)};
+}
+const cdFmt=s=>[Math.floor(s/3600),Math.floor(s%3600/60),s%60].map(x=>String(x).padStart(2,"0")).join(":");
+const hijriTxt=()=>SH.hijri?`${SH.hijri.d} ${SH.hijri.m} ${SH.hijri.y} ${t("ah")}`:"";
+function nextCard(){
+  const x=nextPr();if(!x) return "";
+  const s=Math.max(0,Math.floor((x.t-new Date())/1000));
+  return `<div class="box next"><small>${t("toward",{n:`<span id="cdn">${esc(pnm(x.k).toUpperCase())}</span>`})}</small><div class="big" id="cd">${cdFmt(s)}</div><p style="font-size:12px;opacity:.85">${esc(SH.city)} · ${esc(hijriTxt())}</p></div>`;
+}
+function shellState(){
+  return SH.loading?`<div class="box">${t("loading")}</div>`:SH.err?`<div class="box" style="color:#d11">${esc(t(SH.err))}</div>`:"";
+}
+function cityBox(){
+  return `<div class="box"><div style="display:flex;gap:8px"><input id="sc" style="margin:0" placeholder="${esc(t("city_ph"))}" value="${esc(SH.city)}" onkeydown="if(event.key==='Enter')setCity()"><button class="btn sm" style="width:90px" onclick="setCity()">${t("find")}</button></div></div>`;
+}
+
+/* ---------------- ADZAN ---------------- */
+let AD={on:lsGet("badak_adzan_on","0")==="1",p:{},fired:"",audio:null,audioS:null};
+try{AD.p=JSON.parse(lsGet("badak_adzan_p","null"))||{}}catch(e){AD.p={}}
+PR.forEach(k=>{if(AD.p[k]===undefined) AD.p[k]=true});
+function mkAudio(){
+  const A=CONFIG.adzan||{};
+  const mk=u=>{if(noGanti(u)) return null;const a=new Audio(u);a.preload="auto";return a};
+  AD.audio=mk(A.url);AD.audioS=mk(A.urlSubuh)||AD.audio;
+  [AD.audio,AD.audioS].forEach(a=>{if(a){a.muted=true;a.play().then(()=>{a.pause();a.muted=false;a.currentTime=0}).catch(()=>{a.muted=false})}});
+}
+function toggleAdzan(){
+  AD.on=!AD.on;lsSet("badak_adzan_on",AD.on?"1":"0");
+  if(AD.on){mkAudio();try{if("Notification" in window&&Notification.permission==="default") Notification.requestPermission()}catch(e){}}
+  render();
+}
+function togglePr(k){AD.p[k]=!AD.p[k];lsSet("badak_adzan_p",JSON.stringify(AD.p));render()}
+function playAdzan(k){const a=k==="Fajr"?AD.audioS:AD.audio;if(a){try{a.currentTime=0;a.play()}catch(e){}}}
+function stopAdzan(){[AD.audio,AD.audioS].forEach(a=>{if(a){try{a.pause();a.currentTime=0}catch(e){}}});const b=$("#adzbar");if(b)b.remove()}
+function fireAdzan(k,nm){
+  if(!AD.audio) mkAudio();
+  playAdzan(k);
+  try{if("Notification" in window&&Notification.permission==="granted") new Notification(t("nt",{n:nm}),{body:t("nb",{n:nm,c:SH.city})})}catch(e){}
+  const old=$("#adzbar");if(old) old.remove();
+  const b=document.createElement("div");b.id="adzbar";
+  b.innerHTML=`<span>${esc(t("ad_time",{n:nm,c:SH.city}))}</span><button class="btn sm" onclick="stopAdzan()">${t("stop")}</button>`;
+  document.body.appendChild(b);
+}
+function checkAdzan(){
+  if(!AD.on||!SH.data||!me) return;
+  const n=new Date(),now=String(n.getHours()).padStart(2,"0")+":"+String(n.getMinutes()).padStart(2,"0");
+  for(const k of PR){
+    if(!AD.p[k]) continue;
+    if(hm(SH.data[k])===now&&AD.fired!==dk()+k){AD.fired=dk()+k;fireAdzan(k,pnm(k))}
+  }
+}
+setInterval(()=>{
+  if(!me) return;
+  const x=nextPr(),el=$("#cd");
+  if(el&&x){el.textContent=cdFmt(Math.max(0,Math.floor((x.t-new Date())/1000)));const n=$("#cdn");if(n)n.textContent=pnm(x.k).toUpperCase()}
+  if(SH.data&&SH.key!==SH.city.toLowerCase()+"|"+dk()) ensureSholat(true);
+  checkAdzan();
+},1000);
+// muat jadwal di latar belakang supaya adzan otomatis tetap jalan
+setTimeout(()=>{if(me&&AD.on){mkAudio();ensureSholat()}},1500);
+
+/* ---------------- SCRIPT SHOP ---------------- */
+const OR={k:"badak_orders_v1",all(){try{return JSON.parse(localStorage.getItem(this.k))||[]}catch(e){return[]}},save(a){localStorage.setItem(this.k,JSON.stringify(a))}};
+let TK={sel:null,tot:0,code:"",cat:"all",ok:false};
+const prod=id=>(CONFIG.toko.produk||[]).find(p=>p.id===id);
+const codeFor=async id=>(await hash("toko:"+CONFIG.toko.secret+":"+id)).slice(0,8).toUpperCase();
+function buy(id){const p=prod(id);TK.sel=id;TK.ok=false;TK.tot=p.harga+Math.floor(11+Math.random()*88);render();window.scrollTo(0,0)}
+function placeOrder(){
+  const p=prod(TK.sel);if(!p||!TK.ok) return;
+  const id="BDK-"+Math.random().toString(36).slice(2,7).toUpperCase();
+  const all=OR.all();all.unshift({id,pid:p.id,user:me.user,total:TK.tot,at:Date.now(),status:"menunggu"});OR.save(all);
+  // pesan ke owner selalu bahasa Indonesia
+  const msg=`Halo owner, saya sudah bayar via QRIS.\nOrder ID: ${id}\nProduk: ${p.nama[1]||p.nama}\nTotal: ${"Rp "+Number(TK.tot).toLocaleString("id-ID")}\nUser: ${me.user}\n(bukti pembayaran saya kirim di chat ini)`;
+  copyTxt(msg);openTG(msg);
+  TK.sel=null;TK.ok=false;render();
+}
+async function unlockOrder(id){
+  const v=($("#kd_"+id).value||"").trim().toUpperCase(),e=$("#ke_"+id);
+  if(v!==await codeFor(id)){e.textContent=t("badcode");return}
+  const all=OR.all(),o=all.find(x=>x.id===id);if(o){o.status="terbuka";OR.save(all)}render();
+}
+async function genCode(){
+  const id=($("#go").value||"").trim().toUpperCase();if(!id) return;
+  $("#gc").innerHTML=`${esc(t("code_for",{id}))} <b style="font-size:20px;letter-spacing:2px">${await codeFor(id)}</b>`;
+}
+function copyTxt(x){try{navigator.clipboard&&navigator.clipboard.writeText(x).catch(()=>{})}catch(e){}}
+function tkSync(){const b=$("#tkgo");if(b)b.disabled=!TK.ok}
+
+function tokoList(){
+  const mine=OR.all().filter(o=>me.role==="owner"||o.user===me.user);
+  const plist=(CONFIG.toko.produk||[]).filter(p=>TK.cat==="all"||p.kat===TK.cat);
+  return `<div class="sec"><h3>${t("tk_title")}</h3><span class="pill">${t("tk_n",{n:plist.length})}</span></div>
+  <div class="chips"><button class="chip ${TK.cat==="all"?"on":""}" onclick="TK.cat='all';render()">${t("all")}</button>${CONFIG.toko.kat.map(k=>`<button class="chip ${TK.cat===k.id?"on":""}" onclick="TK.cat='${k.id}';render()">${esc(L(k.nama))}</button>`).join("")}</div>
+  ${plist.map(p=>`<div class="tool" style="align-items:flex-start"><div class="ico" style="${img(p.img)}"></div><div style="flex:1"><b>${esc(L(p.nama))}</b><p>${esc(L(p.desc))}</p><div class="price" style="margin-top:4px">${rp(p.harga)}</div></div><button class="btn sm" onclick="buy('${esc(p.id)}')">${t("buy")}</button></div>`).join("")||`<div class="box">${t("noprod")}</div>`}
+  <div class="sec" style="margin-top:18px"><h3>${t("myord")}</h3><span class="pill">${mine.length}</span></div>
+  ${mine.map(o=>{const p=prod(o.pid)||{nama:o.pid};const open=o.status==="terbuka";
+    return `<div class="box"><div class="row" style="border:0;padding:0"><div><b>${esc(L(p.nama))}</b><br><small style="color:var(--mut)">${esc(o.id)} · ${rp(o.total)}</small></div><span class="tag">${esc(t("st_"+o.status))}</span></div>
+    ${open?(noGanti(p.file)?`<p style="color:#d11;font-size:13px;margin-top:10px">${t("nofile")}</p>`:`<a href="${esc(p.file)}" target="_blank" rel="noopener"><button class="btn" style="margin-top:10px">${t("dl")}</button></a>`)
+    :`<input id="kd_${esc(o.id)}" placeholder="${esc(t("code_ph"))}" style="margin:10px 0 6px"><div class="err" id="ke_${esc(o.id)}"></div><button class="btn" onclick="unlockOrder('${esc(o.id)}')">${t("unlock")}</button>`}</div>`}).join("")||`<div class="box" style="color:var(--mut)">${t("noord")}</div>`}
+  ${me.role==="owner"?`<div class="box"><h3 style="margin-bottom:8px">${t("op")}</h3><p style="font-size:12px;color:var(--mut);margin-bottom:8px">${t("op_d")}</p><input id="go" placeholder="${esc(t("oid_ph"))}"><button class="btn" onclick="genCode()">${t("mkcode")}</button><div id="gc" style="margin-top:10px"></div></div>`:""}`;
+}
+function tokoCheckout(){
+  const p=prod(TK.sel),T=CONFIG.toko;
+  return `<button class="chip" style="margin-bottom:10px" onclick="TK.sel=null;render()">${t("back")}</button>
+  <div class="box"><h3>${esc(L(p.nama))}</h3><p style="color:var(--mut);font-size:13px;margin:4px 0 14px">${esc(L(p.desc))}</p>
+  <div class="stp"><i>1</i><div><b>${t("step1")}</b><p>${t("step1d")}</p></div></div>
+  ${noGanti(T.qris)?`<div class="qris" style="display:grid;place-items:center;color:var(--mut);font-size:13px;padding:20px;text-align:center">${t("noqris")}</div>`:`<img class="qris" src="${esc(T.qris)}" alt="QRIS">`}
+  <p style="text-align:center;font-size:12px;color:var(--mut);margin-top:10px">${t("payexact")}</p><div class="tot">${rp(TK.tot)}</div>
+  <p style="text-align:center;font-size:12px;color:var(--mut);margin:6px 0 16px">${t("uniqc")}</p>
+  <div class="stp"><i>2</i><div><b>${t("step2")}</b><p>${t("step2d")}</p></div></div>
+  <label class="ck"><input type="checkbox" id="tkok" ${TK.ok?"checked":""} onchange="TK.ok=this.checked;tkSync()"><span>${t("ckpaid")}</span></label>
+  <button class="btn" id="tkgo" ${TK.ok?"":"disabled"} onclick="placeOrder()">${t("paid")}</button></div>
+  <div class="box" style="font-size:13px">${t("flow")}</div>`;
+}
+
+/* ---------------- BADAKIN ---------------- */
+let BK={num:"",running:false,out:null};
+function bkView(){
+  return `${backBtn()}<div class="sec"><h3>${t("bk_title")}</h3><span class="pill">${t("bk_pill")}</span></div>
+  <div class="box"><input id="kn" inputmode="tel" placeholder="${esc(t("num_ph"))}" value="${esc(BK.num)}" onkeydown="if(event.key==='Enter')bkRun()">
+  <div class="err" id="kerr"></div><button class="btn" id="kgo" onclick="bkRun()">${t("bk_go")}</button>
+  <div id="kprog" style="display:none"><div class="bar"><i id="kbar"></i></div><div class="term" id="klog"></div></div></div>
+  <div id="kres">${BK.out?bkResult(BK.out):""}</div>`;
+}
+function bkResult(o){
+  return `<div class="box pop"><span class="pill">${t("bk_done")}</span><h3 style="margin:10px 0 2px">${esc(fmtNum(o.n))}</h3><p style="color:var(--mut);font-size:13px">${esc(opText(o.n))}</p><div class="age" style="margin-top:12px">${esc(o.key?t(o.key):o.msg)}</div></div>`;
+}
+const BK_STEPS=[[["Starting up services","Memulai layanan"],500],[["Connecting to server","Menghubungkan ke server"],700],[["Setting things up","Menyiapkan sistem"],900],[["Loading new components","Memuat komponen baru"],500],[["Adding Bypass trinity","Menambahkan Bypass trinity"],800],[["Data is being processed","Data sedang diproses"],900],[["Patience is in progress","Mohon bersabar, sedang berjalan"],400],[["Analyzing incoming data","Menganalisis data masuk"],900],[["Updating internal components","Memperbarui komponen internal"],800],[["Good things are on the way","Hal baik sedang dalam perjalanan"],700]];
+async function bkRun(){
+  if(BK.running) return;
+  const inp=$("#kn"),err=$("#kerr");BK.num=inp.value;err.textContent="";
+  const n=normNum(inp.value);
+  if(!n){err.textContent=t("num_bad");return}
+  BK.running=true;BK.out=null;$("#kres").innerHTML="";
+  const btn=$("#kgo");btn.textContent=t("working");btn.style.opacity=".6";
+  const prog=$("#kprog"),bar=$("#kbar"),log=$("#klog");prog.style.display="block";log.innerHTML="";bar.style.width="0";
+  let msg="",key="bk_ok",ok=false;
+  for(let i=0;i<BK_STEPS.length;i++){
+    const lb=L(BK_STEPS[i][0]);
+    const d=document.createElement("div");d.innerHTML=`<span class="dim">&gt;</span> ${esc(lb)}...`;log.appendChild(d);
+    bar.style.width=((i+.5)/BK_STEPS.length*100)+"%";
+    if(i===2&&CONFIG.api.badakin){
+      try{
+        const ctl=new AbortController();setTimeout(()=>ctl.abort(),20000);
+        const r=await fetch(CONFIG.api.badakin.replace("{nomor}",encodeURIComponent(n.full)),{signal:ctl.signal});
+        const tx=await r.text();let j;try{j=JSON.parse(tx)}catch(e){j={pesan:tx}}
+        msg=String(j.pesan||j.message||j.status||tx).slice(0,300);key="";ok=r.ok;
+      }catch(e){key="bk_srv"}
+    }
+    await sleep(BK_STEPS[i][1]);
+    d.innerHTML=`<span class="ok">OK</span> ${esc(lb)}`;
+    bar.style.width=((i+1)/BK_STEPS.length*100)+"%";
+  }
+  await sleep(250);
+  BK.out={ok,msg,key,n};
+  BK.running=false;btn.textContent=t("bk_go");btn.style.opacity="1";prog.style.display="none";
+  $("#kres").innerHTML=bkResult(BK.out);
+}
+
+/* ---------------- VIEWS FITUR ---------------- */
+Object.assign(views,{
+badakin(){return bkView()},
+cek(){
+  return `${backBtn()}<div class="sec"><h3>${t("ck_title")}</h3><span class="pill">${t("ck_pill")}</span></div>
+  <div class="box"><input id="bn" inputmode="tel" placeholder="${esc(t("num_ph"))}" value="${esc(bd.num)}" onkeydown="if(event.key==='Enter')badakScan()">
+  <div class="err" id="berr"></div><button class="btn" id="bgo" onclick="badakScan()">${t("ck_go")}</button>
+  <div id="bprog" style="display:none"><div class="bar"><i id="bbar"></i></div><div class="term" id="blog"></div></div></div>
+  <div id="bres">${bd.res?badakResult(bd.res):""}</div>`;
+},
+sholat(){
+  const x=nextPr();
+  const rows=SH.data?`<div class="box">${PX.map(k=>`<div class="prow ${x&&x.k===k?"on":""}"><span>${pnm(k)}</span><span>${hm(SH.data[k])}</span></div>`).join("")}</div>`:"";
+  return `${backBtn()}<div class="sec"><h3>${t("sh_title")}</h3><span class="pill">${t("sh_pill")}</span></div>${cityBox()}${shellState()}${SH.data?nextCard():""}${rows}`;
+},
+adzan(){
+  return `${backBtn()}<div class="sec"><h3>${t("ad_title")}</h3><span class="pill">${AD.on?t("on"):t("off")}</span></div>
+  ${cityBox()}${shellState()}${SH.data?nextCard():""}
+  <div class="box"><b>${t("ad_auto")}</b><p style="font-size:12px;color:var(--mut);margin:4px 0 10px">${t("ad_desc")}</p>
+  <button class="btn ${AD.on?"red":""}" onclick="toggleAdzan()">${AD.on?t("ad_off"):t("ad_on")}</button>
+  </div>
+  <div class="box"><b>${t("ad_pick")}</b><div class="chips" style="flex-wrap:wrap;margin-top:10px">${PR.map(k=>`<button class="chip ${AD.p[k]?"on":""}" onclick="togglePr('${k}')">${pnm(k)}${SH.data?" · "+hm(SH.data[k]):""}</button>`).join("")}</div>
+  <button class="btn" style="margin-top:6px" onclick="if(!AD.audio)mkAudio();fireAdzan('Dhuhr',t('ad_testT'))">${t("ad_test")}</button></div>`;
+},
+toko(){return TK.sel?tokoCheckout():`${backBtn()}${tokoList()}`}
+});
+
+setupApp();
+initDB().then(render);
+</script>
+</body></html>
